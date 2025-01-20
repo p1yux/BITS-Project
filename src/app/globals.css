@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --apple-blur: blur(50px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,34 +18,87 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, var(--font-geist-sans);
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-@keyframes fade-in-up {
-  0% {
+/* Apple-style smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
+}
+
+/* Apple-style blur effects */
+.apple-blur {
+  backdrop-filter: var(--apple-blur);
+  -webkit-backdrop-filter: var(--apple-blur);
+}
+
+/* Apple-style animations */
+@keyframes fade-up {
+  from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 1s ease-out;
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(20px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Apple-style text gradients */
+.apple-text-gradient {
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Apple-style glass effect */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Parallax container */
+.parallax-wrapper {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Smooth transitions */
+.smooth-transition {
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Add these new styles */
 .show {
   opacity: 1 !important;
   transform: translateY(0) !important;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
 }
 
 /* Hide scrollbar but keep functionality */

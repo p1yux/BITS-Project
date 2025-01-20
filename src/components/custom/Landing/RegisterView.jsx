@@ -1,95 +1,115 @@
 "use client"
-import { useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 const RegisterView = () => {
   const { scrollY } = useScroll();
   const sectionRef = useRef(null);
 
-  // Create transform values for scroll-based animations
-  const sectionOpacity = useTransform(
-    scrollY,
-    [300, 600], // Start fading in when video starts fading out
-    [0, 1]
+  // Apple-style spring animations
+  const springConfig = {
+    stiffness: 100,
+    damping: 30,
+    mass: 1
+  };
+
+  const sectionOpacity = useSpring(
+    useTransform(scrollY, [300, 600], [0, 1]),
+    springConfig
   );
 
-  const sectionY = useTransform(
-    scrollY,
-    [300, 600],
-    [100, 0] // Slide up as it appears
+  const sectionY = useSpring(
+    useTransform(scrollY, [300, 600], [100, 0]),
+    springConfig
   );
 
+  // Apple-style variants
   const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { 
+      opacity: 0,
+      y: 100,
+      scale: 0.95
+    },
     visible: (i) => ({
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        delay: i * 0.2,
-        duration: 0.8,
-        ease: "easeOut"
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1],
+        delay: i * 0.2
       }
     })
+  };
+
+  const textVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 20,
+      filter: 'blur(10px)'
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
   };
 
   return (
     <motion.div 
       ref={sectionRef} 
-      style={{ 
-        opacity: sectionOpacity,
-        y: sectionY,
-      }}
-      className="absolute top-0 left-0 w-full min-h-screen bg-gradient-to-b from-black/95 via-blue-950/90 to-purple-950/95 py-20 overflow-hidden"
+      style={{ opacity: sectionOpacity, y: sectionY }}
+      className="absolute top-0 left-0 w-full min-h-screen overflow-hidden"
     >
-      {/* Add feather decorations */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Top left feather */}
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 rotate-45 transform scale-x-[-1]"></div>
-        
-        {/* Top right feather */}
-        <div className="absolute -top-20 -right-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 -rotate-45"></div>
-        
-        {/* Bottom left feather */}
-        <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 rotate-[135deg] transform scale-x-[-1]"></div>
-        
-        {/* Bottom right feather */}
-        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 -rotate-[135deg]"></div>
+      <div className="absolute inset-0 w-full h-full">
+        {/* Apple-style background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900/50 to-black" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
       </div>
 
-      <div className="container mx-auto px-4 relative">
-        <div className="max-w-6xl mx-auto select-none">
+      <div className="container mx-auto px-6 py-20 relative h-full flex flex-col justify-center">
+        <div className="max-w-6xl mx-auto w-full">
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-center mb-20 space-y-6"
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+            <motion.h2 
+              variants={textVariants}
+              className="text-5xl md:text-7xl font-bold apple-text-gradient"
+            >
               Join the Revolution
-            </h2>
-            <p className="text-white text-lg md:text-xl max-w-2xl mx-auto font-light tracking-wide drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-              Be part of the most anticipated tech event of 2025. Early bird registrations are now open!
-            </p>
+            </motion.h2>
+            <motion.p 
+              variants={textVariants}
+              className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
+            >
+              Be part of the most anticipated tech event of 2025
+            </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 mt-12">
-            {/* Attendee Registration Card */}
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {/* Cards with Apple-style glass morphism */}
             <motion.div 
               custom={0}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={cardVariants}
-              whileHover={{ scale: 1.05 }}
-              className="bg-gradient-to-br from-blue-950 to-purple-950 rounded-2xl p-8 transition-all duration-300 border-2 border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+              className="apple-glass rounded-3xl p-10 space-y-8"
             >
-              <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
-                Attendee Pass
-              </h3>
-              <motion.ul 
-                className="text-white space-y-4 mb-8 text-lg font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,1)]"
+              <motion.h3 
+                variants={textVariants}
+                className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 mb-6"
               >
+                Attendee Pass
+              </motion.h3>
+              <motion.ul className="text-white/90 space-y-6 mb-8 text-lg">
                 {[
                   "Access to all keynote sessions",
                   "Networking opportunities",
@@ -98,41 +118,39 @@ const RegisterView = () => {
                 ].map((item, index) => (
                   <motion.li 
                     key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center"
+                    custom={index}
+                    variants={textVariants}
+                    className="flex items-center space-x-3"
                   >
-                    <span className="text-blue-400 mr-2 font-bold">✓</span> {item}
+                    <span className="text-blue-400 text-xl">•</span>
+                    <span className="leading-relaxed">{item}</span>
                   </motion.li>
                 ))}
               </motion.ul>
               <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition-all shadow-lg"
+                variants={textVariants}
+                className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium 
+                         shadow-lg shadow-purple-500/20 transition-all duration-300"
               >
                 Register Now
               </motion.button>
             </motion.div>
 
-            {/* Speaker/Sponsor Card */}
             <motion.div 
               custom={1}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={cardVariants}
-              whileHover={{ scale: 1.05 }}
-              className="bg-gradient-to-br from-purple-950 to-blue-950 rounded-2xl p-8 transition-all duration-300 border-2 border-purple-400 shadow-[0_0_15px_rgba(147,51,234,0.5)]"
+              className="apple-glass rounded-3xl p-10 space-y-8"
             >
-              <h3 className="text-3xl font-bold text-white mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
-                Speaker/Sponsor
-              </h3>
-              <motion.ul 
-                className="text-white space-y-4 mb-8 text-lg font-semibold drop-shadow-[0_2px_4px_rgba(0,0,0,1)]"
+              <motion.h3 
+                variants={textVariants}
+                className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 mb-6"
               >
+                Speaker/Sponsor
+              </motion.h3>
+              <motion.ul className="text-white/90 space-y-6 mb-8 text-lg">
                 {[
                   "Speaking opportunities",
                   "Brand visibility",
@@ -141,20 +159,19 @@ const RegisterView = () => {
                 ].map((item, index) => (
                   <motion.li 
                     key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center"
+                    custom={index}
+                    variants={textVariants}
+                    className="flex items-center space-x-3"
                   >
-                    <span className="text-purple-400 mr-2 font-bold">✓</span> {item}
+                    <span className="text-purple-400 text-xl">•</span>
+                    <span className="leading-relaxed">{item}</span>
                   </motion.li>
                 ))}
               </motion.ul>
               <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-bold transition-all shadow-lg"
+                variants={textVariants}
+                className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium 
+                         shadow-lg shadow-purple-500/20 transition-all duration-300"
               >
                 Contact Us
               </motion.button>
