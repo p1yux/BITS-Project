@@ -39,9 +39,24 @@ const RegisterView = () => {
         opacity: sectionOpacity,
         y: sectionY,
       }}
-      className="absolute top-0 left-0 w-full min-h-screen bg-black/95 py-20"
+      className="absolute top-0 left-0 w-full min-h-screen bg-gradient-to-b from-black/95 via-blue-950/90 to-purple-950/95 py-20 overflow-hidden"
     >
-      <div className="container mx-auto px-4">
+      {/* Add feather decorations */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Top left feather */}
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 rotate-45 transform scale-x-[-1]"></div>
+        
+        {/* Top right feather */}
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 -rotate-45"></div>
+        
+        {/* Bottom left feather */}
+        <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 rotate-[135deg] transform scale-x-[-1]"></div>
+        
+        {/* Bottom right feather */}
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[url('/feather.png')] bg-contain bg-no-repeat opacity-20 -rotate-[135deg]"></div>
+      </div>
+
+      <div className="container mx-auto px-4 relative">
         <div className="max-w-6xl mx-auto select-none">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}

@@ -185,24 +185,6 @@ const HeroSection = () => {
             </div>
           </div>
         </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <p className="text-white text-sm font-light tracking-wider">
-            SCROLL TO EXPLORE
-          </p>
-          <div className="w-6 h-10 border-2 border-white rounded-full mt-2 relative">
-            <motion.div 
-              className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full"
-              animate={{ y: [2, 20, 2] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
