@@ -60,24 +60,37 @@ const HeroSection = () => {
         this.y = Math.random() * canvas.height;
         this.z = Math.random() * 2 + 0.1;
         this.size = Math.random() * 1.5 + 1;
-        this.speedX = (Math.random() * 0.5 - 0.25); // Reduced speed
-        this.speedY = (Math.random() * 0.5 - 0.25); // Reduced speed
-        this.speedZ = (Math.random() * 0.005 - 0.0025); // Reduced speed
+        this.speedX = (Math.random() * 1 - 0.5); // Increased range from 0.5 to 1
+        this.speedY = (Math.random() * 1 - 0.5); // Increased range from 0.5 to 1
+        this.speedZ = (Math.random() * 0.01 - 0.005); // Increased from 0.005 to 0.01
       }
 
       update() {
+        // Add minimum speed threshold
+        const minSpeed = 0.1;
+        
+        // Ensure minimum movement speed
+        if (Math.abs(this.speedX) < minSpeed) {
+          this.speedX = minSpeed * (this.speedX < 0 ? -1 : 1);
+        }
+        if (Math.abs(this.speedY) < minSpeed) {
+          this.speedY = minSpeed * (this.speedY < 0 ? -1 : 1);
+        }
+
         this.x += this.speedX;
         this.y += this.speedY;
         this.z += this.speedZ;
 
+        // Bounce effect for z-axis
         if (this.z <= 0.1) {
           this.z = 0.1;
-          this.speedZ *= -1;
+          this.speedZ = Math.abs(this.speedZ); // Ensure positive speed
         } else if (this.z >= 2) {
           this.z = 2;
-          this.speedZ *= -1;
+          this.speedZ = -Math.abs(this.speedZ); // Ensure negative speed
         }
         
+        // Wrap around screen edges
         if (this.x > canvas.width) this.x = 0;
         if (this.x < 0) this.x = canvas.width;
         if (this.y > canvas.height) this.y = 0;
