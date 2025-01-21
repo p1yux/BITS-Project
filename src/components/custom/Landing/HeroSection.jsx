@@ -39,6 +39,9 @@ const HeroSection = () => {
     const ctx = canvas.getContext('2d');
     let particles = [];
     let animationFrameId;
+    let lastTime = 0;
+    const FPS = 30; // Limit FPS to 30
+    const frameDelay = 1000 / FPS;
     
     const setCanvasSize = () => {
       canvas.width = window.innerWidth;
@@ -46,15 +49,20 @@ const HeroSection = () => {
     };
     setCanvasSize();
 
+    // Optimize Particle class
     class Particle {
       constructor() {
+        this.reset();
+      }
+
+      reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.z = Math.random() * 2 + 0.1;
         this.size = Math.random() * 1.5 + 1;
-        this.speedX = Math.random() * 1 - 0.5;
-        this.speedY = Math.random() * 1 - 0.5;
-        this.speedZ = Math.random() * 0.01 - 0.005;
+        this.speedX = (Math.random() * 0.5 - 0.25); // Reduced speed
+        this.speedY = (Math.random() * 0.5 - 0.25); // Reduced speed
+        this.speedZ = (Math.random() * 0.005 - 0.0025); // Reduced speed
       }
 
       update() {
@@ -77,8 +85,8 @@ const HeroSection = () => {
       }
 
       draw() {
-        const scale = Math.max(0.1, (2 - this.z) * 2);
-        const opacity = Math.max(0.1, (2 - this.z) * 0.3);
+        const scale = Math.max(0.1, (2 - this.z) * 1.5);
+        const opacity = Math.max(0.1, (2 - this.z) * 0.2);
         ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, Math.max(0.1, this.size * scale), 0, Math.PI * 2);
@@ -88,47 +96,72 @@ const HeroSection = () => {
 
     const init = () => {
       particles = [];
-      for (let i = 0; i < 50; i++) {
+      // Reduced number of particles
+      for (let i = 0; i < 30; i++) {
         particles.push(new Particle());
       }
     };
 
-    const animate = () => {
+    const animate = (currentTime) => {
+      // Add FPS limiting
+      if (currentTime - lastTime < frameDelay) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      lastTime = currentTime;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      particles.forEach(particle => {
+      // Use a single loop for better performance
+      for (let i = 0; i < particles.length; i++) {
+        const particle = particles[i];
         particle.update();
         particle.draw();
-      });
-
-      particles.forEach(a => {
-        particles.forEach(b => {
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
+        
+        // Only check connections with particles ahead in the array
+        for (let j = i + 1; j < particles.length; j++) {
+          const other = particles[j];
+          const dx = particle.x - other.x;
+          const dy = particle.y - other.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < 80) {
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.8 - distance/80})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 - distance/80})`;
+            ctx.lineWidth = 0.3;
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(other.x, other.y);
             ctx.stroke();
           }
-        });
-      });
+        }
+      }
 
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    init();
-    animate();
+    // Throttle resize handler
+    let resizeTimeout;
+    const handleResize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = setTimeout(() => {
+        setCanvasSize();
+        init();
+      }, 250);
+    };
 
-    window.addEventListener('resize', setCanvasSize);
+    init();
+    animate(0);
+
+    window.addEventListener('resize', handleResize);
     
     return () => {
-      window.removeEventListener('resize', setCanvasSize);
+      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
     };
   }, []);
 
@@ -144,6 +177,7 @@ const HeroSection = () => {
           muted
           loop
           playsInline
+          loading="lazy"
           className="object-cover w-full h-full"
         >
           <source src="/tech-bg.mp4" type="video/mp4" />
@@ -165,7 +199,7 @@ const HeroSection = () => {
             muted
             loop
             playsInline
-            className="object-cover w-full h-full brightness-150 contrast-125"
+            className="object-cover w-full h-full brightness-125 contrast-100"
           >
             <source src="/tech01.mp4" type="video/mp4" />
           </video>
@@ -185,7 +219,7 @@ const HeroSection = () => {
           className="absolute inset-0 flex items-center justify-center w-full h-full px-4"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="mb-6 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 md:text-7xl lg:text-8xl glow-text">
+            <h1 className="mb-6 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 md:text-7xl lg:text-8xl">
               Welcome to BITS 2025
             </h1>
             
@@ -197,13 +231,13 @@ const HeroSection = () => {
             <div className="flex flex-wrap items-center justify-center gap-4">
               <button 
                 onClick={scrollToRegister}
-                className="px-8 py-3 text-lg font-semibold text-white transition-all bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-105 hover:glow-button"
+                className="px-8 py-3 text-lg font-semibold text-white transition-all bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-102"
               >
                 Register Now
               </button>
               <button 
                 onClick={scrollToRegister}
-                className="px-8 py-3 text-lg font-semibold text-blue-400 transition-all border-2 border-blue-400 rounded-full hover:bg-blue-400/10 hover:scale-105 hover:glow-border"
+                className="px-8 py-3 text-lg font-semibold text-blue-400 transition-all border-2 border-blue-400 rounded-full hover:bg-blue-400/10 hover:scale-102"
               >
                 Learn More
               </button>
