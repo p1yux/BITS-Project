@@ -21,12 +21,16 @@ body {
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, var(--font-geist-sans);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
 }
 
 /* Apple-style smooth scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth !important;
   background-color: var(--background);
+  scroll-padding-top: 64px; /* Height of your navbar */
+  overflow-x: hidden;
 }
 
 /* Apple-style blur effects */
@@ -78,9 +82,9 @@ html {
 
 /* Apple-style glass effect */
 .apple-glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Parallax container */
@@ -166,4 +170,11 @@ html {
   to {
     background-position: 200% center;
   }
+}
+
+/* Add this new style */
+.scroll-container {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
 }

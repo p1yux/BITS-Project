@@ -66,7 +66,7 @@ const RegisterView = () => {
     <motion.div 
       ref={sectionRef} 
       style={{ opacity: sectionOpacity, y: sectionY }}
-      className="absolute top-0 left-0 w-full min-h-screen overflow-hidden"
+      className="relative w-full min-h-screen"
     >
       <div className="absolute inset-0 w-full h-full">
         {/* Apple-style background */}
@@ -74,29 +74,29 @@ const RegisterView = () => {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
       </div>
 
-      <div className="container mx-auto px-6 h-screen flex items-center">
+      <div className="container mx-auto px-4 sm:px-6 min-h-screen py-20 flex items-center">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div 
-            className="text-center mb-16 space-y-4"
+            className="text-center mb-8 sm:mb-16 space-y-4"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
           >
             <motion.h2 
               variants={textVariants}
-              className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600"
+              className="text-3xl sm:text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600"
             >
               Join the Revolution
             </motion.h2>
             <motion.p 
               variants={textVariants}
-              className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4"
             >
               Be part of the most anticipated tech event of 2025
             </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-8 px-4 sm:px-0">
             {/* Attendee Card */}
             <motion.div
               custom={0}
@@ -104,11 +104,11 @@ const RegisterView = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={cardVariants}
-              className="apple-glass rounded-3xl p-8 text-center"
+              className="apple-glass rounded-3xl p-6 sm:p-8 text-center"
             >
-              <FaUserGraduate className="w-12 h-12 mx-auto mb-6 text-blue-400" />
-              <h3 className="text-2xl font-bold text-white mb-4">Register as Attendee</h3>
-              <ul className="text-gray-300 space-y-3 mb-8 text-left">
+              <FaUserGraduate className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-4 sm:mb-6 text-blue-400" />
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Register as Attendee</h3>
+              <ul className="text-gray-300 space-y-2 sm:space-y-3 mb-6 sm:mb-8 text-left text-sm sm:text-base">
                 <li>• Access to all keynote sessions</li>
                 <li>• Interactive workshops and demos</li>
                 <li>• Networking opportunities</li>
@@ -119,7 +119,7 @@ const RegisterView = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => router.push('/register/attendee')}
-                className="w-full py-3 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300"
+                className="w-full py-3 px-4 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300"
               >
                 Register Now
               </motion.button>
@@ -132,11 +132,11 @@ const RegisterView = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={cardVariants}
-              className="apple-glass rounded-3xl p-8 text-center"
+              className="apple-glass rounded-3xl p-6 sm:p-8 text-center"
             >
-              <FaHandshake className="w-12 h-12 mx-auto mb-6 text-blue-400" />
-              <h3 className="text-2xl font-bold text-white mb-4">Become a Sponsor</h3>
-              <ul className="text-gray-300 space-y-3 mb-8 text-left">
+              <FaHandshake className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-4 sm:mb-6 text-blue-400" />
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Become a Sponsor</h3>
+              <ul className="text-gray-300 space-y-2 sm:space-y-3 mb-6 sm:mb-8 text-left text-sm sm:text-base">
                 <li>• Premium booth placement</li>
                 <li>• Speaking opportunities</li>
                 <li>• Brand visibility</li>
@@ -146,7 +146,7 @@ const RegisterView = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full py-3 rounded-full font-semibold border-2 border-blue-400 text-blue-400 hover:bg-blue-400/10 transition-all duration-300"
+                className="w-full py-3 px-4 rounded-full font-semibold border-2 border-blue-400 text-blue-400 hover:bg-blue-400/10 transition-all duration-300"
               >
                 Contact Us
               </motion.button>
