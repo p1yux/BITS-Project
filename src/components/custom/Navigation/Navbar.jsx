@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import LoginButton from '@/components/custom/Auth/LoginButton';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,6 +105,7 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              <LoginButton />
             </div>
 
             {/* Mobile Menu Button */}
@@ -143,6 +145,7 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                <LoginButton />
               </div>
             </motion.div>
           )}

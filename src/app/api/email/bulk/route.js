@@ -1,16 +1,7 @@
-import { google } from 'googleapis';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 import nodemailer from 'nodemailer';
 import { bulkEmail } from '@/utils/emailTemplates';
-
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  },
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-});
-
-const sheets = google.sheets({ version: 'v4', auth });
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -24,13 +15,9 @@ export async function POST(req) {
   try {
     const { subject, content } = await req.json();
 
-    // Get all emails from sheet
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.SHEET_ID,
-      range: 'Sheet1!B:B', // Email column
-    });
-
-    const emails = response.data.values.flat().slice(1); // Remove header
+    // Get all emails from Firebase
+    const querySnapshot = await getDocs(collection(db, 'attendees'));
+    const emails = querySnapshot.docs.map(doc => doc.data().email);
 
     // Send emails in batches of 50
     const batchSize = 50;

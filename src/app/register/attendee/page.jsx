@@ -1,13 +1,46 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/custom/Navigation/Navbar';
 import AttendeeRegistration from '@/components/custom/Forms/AttendeeRegistration';
 import RegistrationSummary from '@/components/custom/Forms/RegistrationSummary';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [registrationData, setRegistrationData] = useState(null);
+  const { user, signInWithGoogle } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (!user) {
+        try {
+          await signInWithGoogle();
+        } catch (error) {
+          console.error('Authentication failed:', error);
+          router.push('/');
+        }
+      }
+    };
+
+    checkAuth();
+  }, [user, signInWithGoogle, router]);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-white text-center"
+        >
+          Authenticating...
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-black">

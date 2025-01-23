@@ -3,9 +3,11 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { FaUserGraduate, FaHandshake } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const RegisterView = () => {
   const router = useRouter();
+  const { user, signInWithGoogle } = useAuth();
   const { scrollY } = useScroll();
   const sectionRef = useRef(null);
 
@@ -59,6 +61,20 @@ const RegisterView = () => {
         duration: 1,
         ease: [0.16, 1, 0.3, 1]
       }
+    }
+  };
+
+  const handleRegisterClick = async () => {
+    try {
+      if (!user) {
+        // If not logged in, trigger Google sign in
+        await signInWithGoogle();
+      }
+      // Navigate to registration page
+      router.push('/register/attendee');
+    } catch (error) {
+      console.error('Authentication error:', error);
+      alert('Failed to authenticate. Please try again.');
     }
   };
 
@@ -118,10 +134,10 @@ const RegisterView = () => {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => router.push('/register/attendee')}
+                onClick={handleRegisterClick}
                 className="w-full py-3 px-4 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300"
               >
-                Register Now
+                {user ? 'Register Now' : 'Sign in to Register'}
               </motion.button>
             </motion.div>
 

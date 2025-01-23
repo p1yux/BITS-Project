@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaBuilding } from 'react-icons/fa';
+import { useAuth } from '@/contexts/AuthContext';
 
 const AttendeeRegistration = ({ onComplete }) => {
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -103,10 +106,12 @@ const AttendeeRegistration = ({ onComplete }) => {
     e.preventDefault();
     
     try {
+      const token = await user.getIdToken();
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });

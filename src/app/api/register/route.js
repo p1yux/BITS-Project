@@ -1,53 +1,36 @@
-import { google } from 'googleapis';
+import { db, auth } from '@/lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 import nodemailer from 'nodemailer';
 import { registrationEmail } from '@/utils/emailTemplates';
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log('Received registration data:', body); // Debug log
+    console.log('Received registration data:', body);
 
-    // Initialize Google Auth
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
+    // Verify the authentication token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
 
-    // Initialize Google Sheets
-    const sheets = google.sheets({ version: 'v4', auth });
-    console.log('Google Sheets initialized'); // Debug log
-
-    // Format data for sheets
-    const values = [
-      [
-        body.fullName,
-        body.email,
-        body.gender,
-        body.country,
-        body.state || 'N/A',
-        body.contactNumber,
-        body.profession,
-        body.profession === 'student' ? body.studentDetails.college : 'N/A',
-        body.profession === 'student' ? body.studentDetails.year : 'N/A',
-        new Date().toISOString(),
-      ],
-    ];
+    const token = authHeader.split('Bearer ')[1];
+    try {
+      await auth.verifyIdToken(token);
+    } catch (error) {
+      return Response.json({ success: false, error: 'Invalid token' }, { status: 401 });
+    }
 
     try {
-      // Append to Google Sheet
-      const response = await sheets.spreadsheets.values.append({
-        spreadsheetId: process.env.SHEET_ID,
-        range: 'Sheet1!A:J',
-        valueInputOption: 'RAW',
-        requestBody: { values },
+      // Add to Firebase
+      const docRef = await addDoc(collection(db, 'attendees'), {
+        ...body,
+        registeredAt: new Date().toISOString(),
       });
-      console.log('Data appended to sheet:', response.data); // Debug log
-    } catch (sheetError) {
-      console.error('Google Sheets error:', sheetError);
-      throw new Error('Failed to save to spreadsheet');
+      console.log('Document written with ID: ', docRef.id);
+    } catch (firebaseError) {
+      console.error('Firebase error:', firebaseError);
+      throw new Error('Failed to save registration');
     }
 
     try {
@@ -67,7 +50,7 @@ export async function POST(req) {
         subject: 'Registration Confirmed - BITS 2025',
         html: registrationEmail(body),
       });
-      console.log('Confirmation email sent'); // Debug log
+      console.log('Confirmation email sent');
     } catch (emailError) {
       console.error('Email error:', emailError);
       // Don't throw error here, registration can still be considered successful
