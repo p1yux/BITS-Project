@@ -1,71 +1,106 @@
-import { db, auth } from '@/lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import nodemailer from 'nodemailer';
-import { registrationEmail } from '@/utils/emailTemplates';
+import { adminAuth } from '@/lib/firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
 
 export async function POST(req) {
+  // Always set CORS headers
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+  };
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers, status: 204 });
+  }
+
   try {
-    const body = await req.json();
-    console.log('Received registration data:', body);
-
-    // Verify the authentication token
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    if (req.method !== 'POST') {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Method not allowed' }), 
+        { status: 405, headers }
+      );
     }
 
-    const token = authHeader.split('Bearer ')[1];
+    let body;
     try {
-      await auth.verifyIdToken(token);
-    } catch (error) {
-      return Response.json({ success: false, error: 'Invalid token' }, { status: 401 });
+      body = await req.json();
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      return new Response(
+        JSON.stringify({ success: false, error: 'Invalid JSON payload' }), 
+        { status: 400, headers }
+      );
     }
 
+    const token = req.headers.get('authorization')?.split('Bearer ')[1];
+    if (!token) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'No token provided' }), 
+        { status: 401, headers }
+      );
+    }
+
+    let decodedToken;
     try {
-      // Add to Firebase
-      const docRef = await addDoc(collection(db, 'attendees'), {
-        ...body,
-        registeredAt: new Date().toISOString(),
-      });
-      console.log('Document written with ID: ', docRef.id);
-    } catch (firebaseError) {
-      console.error('Firebase error:', firebaseError);
-      throw new Error('Failed to save registration');
+      decodedToken = await adminAuth.verifyIdToken(token);
+    } catch (authError) {
+      console.error('Token verification failed:', authError);
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Invalid authentication token',
+          details: authError.message 
+        }), 
+        { status: 401, headers }
+      );
     }
 
-    try {
-      // Initialize email transporter
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+    const adminDb = getFirestore();
+    
+    // Check for existing registration
+    const existingReg = await adminDb
+      .collection('attendees')
+      .where('userId', '==', decodedToken.uid)
+      .get();
 
-      // Send confirmation email
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: body.email,
-        subject: 'Registration Confirmed - BITS 2025',
-        html: registrationEmail(body),
-      });
-      console.log('Confirmation email sent');
-    } catch (emailError) {
-      console.error('Email error:', emailError);
-      // Don't throw error here, registration can still be considered successful
+    if (!existingReg.empty) {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'You have already registered for this event' 
+        }), 
+        { status: 400, headers }
+      );
     }
 
-    return Response.json({ success: true });
+    // Save to Firestore
+    const docRef = await adminDb.collection('attendees').add({
+      ...body,
+      userId: decodedToken.uid,
+      registeredAt: new Date().toISOString(),
+      status: 'pending',
+      emailVerified: decodedToken.email_verified
+    });
+
+    return new Response(
+      JSON.stringify({ 
+        success: true, 
+        registrationId: docRef.id 
+      }), 
+      { status: 200, headers }
+    );
+
   } catch (error) {
     console.error('Registration error:', error);
-    return Response.json(
-      { 
+    return new Response(
+      JSON.stringify({ 
         success: false, 
         error: error.message,
-        details: process.env.NODE_ENV === 'development' ? error.stack : undefined 
-      }, 
-      { status: 500 }
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      }), 
+      { status: 500, headers }
     );
   }
 } 

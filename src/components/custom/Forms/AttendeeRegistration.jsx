@@ -18,7 +18,10 @@ const AttendeeRegistration = ({ onComplete }) => {
     studentDetails: {
       college: '',
       year: ''
-    }
+    },
+    userId: user?.uid || '',
+    registeredAt: new Date().toISOString(),
+    status: 'pending'
   });
 
   const [states, setStates] = useState([]);
@@ -83,6 +86,16 @@ const AttendeeRegistration = ({ onComplete }) => {
     }
   }, [formData.country]);
 
+  useEffect(() => {
+    if (user?.email) {
+      setFormData(prev => ({
+        ...prev,
+        email: user.email,
+        userId: user.uid
+      }));
+    }
+  }, [user]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith('student.')) {
@@ -106,27 +119,65 @@ const AttendeeRegistration = ({ onComplete }) => {
     e.preventDefault();
     
     try {
-      const token = await user.getIdToken();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      const token = await user.getIdToken(true);
+      
+      // Log the request details (for debugging)
+      console.log('Sending request with data:', {
+        url: '/api/register',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: {
+          ...formData,
+          userId: user.uid,
+        }
+      });
+
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userId: user.uid,
+        })
       });
-      
+
+      // Log response details (for debugging)
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+      // Check if response is ok before trying to parse JSON
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      // Try to parse JSON response
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error(`Invalid content type: ${contentType}`);
+      }
+
       const data = await response.json();
       
       if (data.success) {
         onComplete(formData);
       } else {
-        console.error('Registration failed:', data.error);
-        alert(`Registration failed: ${data.error || 'Please try again.'}`);
+        throw new Error(data.error || 'Registration failed');
       }
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Network error occurred. Please check your connection and try again.');
+      alert(`Registration failed: ${error.message}. Please try again.`);
     }
   };
 
