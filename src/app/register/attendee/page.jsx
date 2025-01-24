@@ -6,6 +6,8 @@ import Navbar from '@/components/custom/Navigation/Navbar';
 import AttendeeRegistration from '@/components/custom/Forms/AttendeeRegistration';
 import RegistrationSummary from '@/components/custom/Forms/RegistrationSummary';
 import { useAuth } from '@/contexts/AuthContext';
+import { db } from '@/lib/firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
@@ -27,6 +29,28 @@ export default function RegisterPage() {
 
     checkAuth();
   }, [user, signInWithGoogle, router]);
+
+  useEffect(() => {
+    const checkExistingRegistration = async () => {
+      if (user) {
+        try {
+          const registrationsRef = collection(db, 'attendees');
+          const q = query(registrationsRef, where('userId', '==', user.uid));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const existingData = querySnapshot.docs[0].data();
+            setRegistrationData(existingData);
+            setStep(2);
+          }
+        } catch (error) {
+          console.error('Error checking registration:', error);
+        }
+      }
+    };
+
+    checkExistingRegistration();
+  }, [user]);
 
   if (!user) {
     return (

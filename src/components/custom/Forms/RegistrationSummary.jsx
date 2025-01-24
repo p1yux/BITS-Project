@@ -1,14 +1,20 @@
 "use client"
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 const RegistrationSummary = ({ data }) => {
+  const router = useRouter();
   const [showTeamForm, setShowTeamForm] = useState(false);
   const [teamMember, setTeamMember] = useState({
     name: '',
     email: '',
     role: ''
   });
+
+  const handleFinish = () => {
+    router.push('/landing');
+  };
 
   return (
     <div className="grid md:grid-cols-2 gap-8 w-full max-w-6xl">
@@ -57,18 +63,28 @@ const RegistrationSummary = ({ data }) => {
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="apple-glass rounded-3xl p-8"
+        className="apple-glass rounded-3xl p-8 flex flex-col"
       >
         <h2 className="text-2xl font-bold text-white mb-6">Add Team Member (Optional)</h2>
         {!showTeamForm ? (
-          <motion.button
-            onClick={() => setShowTeamForm(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full py-3 rounded-full font-semibold border-2 border-blue-400 text-blue-400 hover:bg-blue-400/10"
-          >
-            Add Team Member
-          </motion.button>
+          <div className="flex flex-col gap-4 h-full">
+            <motion.button
+              onClick={() => setShowTeamForm(true)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-3 rounded-full font-semibold border-2 border-blue-400 text-blue-400 hover:bg-blue-400/10"
+            >
+              Add Team Member
+            </motion.button>
+            <motion.button
+              onClick={handleFinish}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-3 rounded-full font-semibold bg-green-600 hover:bg-green-700 text-white mt-auto"
+            >
+              Finish Registration
+            </motion.button>
+          </div>
         ) : (
           <form className="space-y-4">
             <div>
@@ -98,14 +114,25 @@ const RegistrationSummary = ({ data }) => {
                 className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white focus:border-blue-400 focus:outline-none"
               />
             </div>
-            <motion.button
-              type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full py-3 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Add Member
-            </motion.button>
+            <div className="flex gap-4">
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 py-3 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Add Member
+              </motion.button>
+              <motion.button
+                type="button"
+                onClick={handleFinish}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 py-3 rounded-full font-semibold bg-green-600 hover:bg-green-700 text-white"
+              >
+                Finish
+              </motion.button>
+            </div>
           </form>
         )}
       </motion.div>
