@@ -51,7 +51,7 @@ const LoginButton = () => {
         className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-gray-100 text-gray-800 transition-all duration-300"
       >
         <FcGoogle className="w-5 h-5" />
-        Sign in with Google
+        Sign in
       </motion.button>
     );
   }
