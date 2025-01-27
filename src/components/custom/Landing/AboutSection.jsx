@@ -96,10 +96,10 @@ const AboutSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-6">
-              About BITS 2025
+              About BLITS
             </h2>
             <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-              BITS 2025 is where technology meets innovation, bringing together the brightest minds 
+              BLITS is where technology meets innovation, bringing together the brightest minds 
               and latest advancements in the tech industry.
             </p>
           </motion.div>

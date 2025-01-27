@@ -7,7 +7,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: "BITS 2025 - Technology Summit",
+  title: "BLITS - Technology Summit",
   description: "The biggest technology summit of the year. Experience innovation, connect with industry leaders, and shape the future.",
 };
 

@@ -18,11 +18,11 @@ export default function AboutPage() {
           className="max-w-4xl mx-auto text-center"
         >
           <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-8">
-            About BITS 2025
+            About BLITS
           </h1>
           <div className="space-y-6 text-gray-300">
             <p className="text-lg">
-              BITS 2025 is the premier technology conference bringing together innovators,
+              BLITS is the premier technology conference bringing together innovators,
               thought leaders, and tech enthusiasts from around the globe.
             </p>
             {/* Add more content as needed */}

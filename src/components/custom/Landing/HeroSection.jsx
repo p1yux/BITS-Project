@@ -233,7 +233,7 @@ const HeroSection = () => {
         >
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="mb-6 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 md:text-7xl lg:text-8xl">
-              Welcome to BITS 2025
+              Welcome to BLITS
             </h1>
             
             <p className="max-w-2xl mx-auto mb-8 text-lg text-gray-300 md:text-xl lg:text-2xl">

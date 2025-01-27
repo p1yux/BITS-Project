@@ -8,8 +8,8 @@ const FAQSection = () => {
 
   const faqs = [
     {
-      question: "What is BITS 2025's focus on startups?",
-      answer: "BITS 2025 provides a platform for startups to showcase their innovations, connect with investors, and participate in pitch competitions. We offer dedicated startup booths, mentorship sessions, and networking opportunities with industry leaders."
+      question: "What is BLITS's focus on startups?",
+      answer: "BLITS provides a platform for startups to showcase their innovations, connect with investors, and participate in pitch competitions. We offer dedicated startup booths, mentorship sessions, and networking opportunities with industry leaders."
     },
     {
       question: "How can I participate in the startup pitch competition?",
@@ -20,8 +20,8 @@ const FAQSection = () => {
       answer: "We offer structured networking sessions, one-on-one meetings with investors, roundtable discussions with industry experts, and informal networking events. Our mobile app helps you connect with relevant attendees."
     },
     {
-      question: "What technologies will be showcased at BITS 2025?",
-      answer: "BITS 2025 covers cutting-edge technologies including AI/ML, Blockchain, IoT, Cloud Computing, Cybersecurity, and Sustainable Tech. We feature hands-on workshops, tech demos, and expert-led sessions."
+      question: "What technologies will be showcased at BLITS?",
+      answer: "BLITS covers cutting-edge technologies including AI/ML, Blockchain, IoT, Cloud Computing, Cybersecurity, and Sustainable Tech. We feature hands-on workshops, tech demos, and expert-led sessions."
     },
     {
       question: "Are there workshops for business development?",
@@ -36,8 +36,8 @@ const FAQSection = () => {
       answer: "We offer various sponsorship tiers with different benefits. Contact our partnerships team for detailed information about sponsorship packages and custom collaboration opportunities."
     },
     {
-      question: "What makes BITS 2025 different from other tech events?",
-      answer: "BITS 2025 uniquely combines technology, business, and innovation. We focus on actionable insights, real networking opportunities, and tangible business outcomes rather than just presentations."
+      question: "What makes BLITS different from other tech events?",
+      answer: "BLITS uniquely combines technology, business, and innovation. We focus on actionable insights, real networking opportunities, and tangible business outcomes rather than just presentations."
     }
   ];
 
@@ -54,7 +54,7 @@ const FAQSection = () => {
             Frequently Asked Questions
           </h2>
           <p className="text-gray-300 text-lg">
-            Everything you need to know about BITS 2025
+            Everything you need to know about BLITS
           </p>
         </motion.div>
 

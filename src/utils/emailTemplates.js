@@ -13,11 +13,11 @@ export const registrationEmail = (userData) => `
 <body>
   <div class="container">
     <div class="header">
-      <h1>Welcome to BITS 2025!</h1>
+      <h1>Welcome to BLITS!</h1>
     </div>
     <div class="content">
       <h2>Hello ${userData.fullName},</h2>
-      <p>Thank you for registering for BITS 2025. We're excited to have you join us!</p>
+      <p>Thank you for registering for BLITS. We're excited to have you join us!</p>
       <p>Your registration details:</p>
       <ul>
         <li>Name: ${userData.fullName}</li>
@@ -25,7 +25,7 @@ export const registrationEmail = (userData) => `
         <li>Profession: ${userData.profession}</li>
       </ul>
       <p>We'll keep you updated with more information as we get closer to the event.</p>
-      <p>Best regards,<br>BITS 2025 Team</p>
+      <p>Best regards,<br>BLITS Team</p>
     </div>
   </div>
 </body>
@@ -43,12 +43,12 @@ export const bulkEmail = (subject, content) => `
 <body>
   <div class="container">
     <div class="header">
-      <h1>BITS 2025 Update</h1>
+      <h1>BLITS Update</h1>
     </div>
     <div class="content">
       <h2>${subject}</h2>
       ${content}
-      <p>Best regards,<br>BITS 2025 Team</p>
+      <p>Best regards,<br>BLITS Team</p>
     </div>
   </div>
 </body>
