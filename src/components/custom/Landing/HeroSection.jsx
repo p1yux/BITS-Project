@@ -185,7 +185,7 @@ const HeroSection = () => {
         className="absolute inset-0 w-full h-full"
         style={{ opacity: techBgOpacity }}
       >
-        <video
+        {/* <video
           autoPlay
           muted
           loop
@@ -193,8 +193,9 @@ const HeroSection = () => {
           loading="lazy"
           className="object-cover w-full h-full"
         >
-          <source src="/tech-bg.mp4" type="video/mp4" />
-        </video>
+          <source src="/bg-img.jpg" type="image/jpg" />
+        </video> */}
+        <img src="./bg-img.jpg"/>
         <div className="absolute inset-0 bg-black/40" />
       </motion.div>
 
@@ -214,7 +215,7 @@ const HeroSection = () => {
             playsInline
             className="object-cover w-full h-full brightness-125 contrast-100"
           >
-            <source src="/tech01.mp4" type="video/mp4" />
+            <source src="/tech-bg.mp4" type="video/mp4" />
           </video>
         </motion.div>
 
