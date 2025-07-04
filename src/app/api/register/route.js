@@ -81,7 +81,9 @@ export async function POST(req) {
       userId: decodedToken.uid,
       registeredAt: new Date().toISOString(),
       status: 'pending',
-      emailVerified: decodedToken.email_verified
+      emailVerified: decodedToken.email_verified,
+      passType: body.passType || 'student',
+      passPrice: body.passPrice || 500
     });
 
     return new Response(

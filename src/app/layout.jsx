@@ -3,6 +3,7 @@ import { AudioProvider } from "@/context/AudioContext";
 import AudioControl from "@/components/custom/AudioControl";
 import "./globals.css";
 import { AuthProvider } from '@/contexts/AuthContext';
+import Navbar from '@/components/custom/Navigation/Navbar';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body>
         <AuthProvider>
           <AudioProvider>
+            <Navbar />
             {children}
             <AudioControl />
           </AudioProvider>

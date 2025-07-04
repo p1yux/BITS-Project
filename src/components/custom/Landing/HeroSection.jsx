@@ -23,7 +23,7 @@ const HeroSection = () => {
   const techBgOpacity = useTransform(
     scrollY,
     [0, 300, 600],
-    [0.3, 0.8, 0]  // Start more transparent
+    [0.3, 0.8, 0.3]  // Start more transparent
   );
 
   const scrollToRegister = () => {
@@ -32,6 +32,17 @@ const HeroSection = () => {
       top: window.innerHeight,
       behavior: 'smooth'
     });
+  };
+
+  const scrollToSchedule = () => {
+    // Scroll to event schedule section
+    const scheduleSection = document.querySelector('#event-schedule-section');
+    if (scheduleSection) {
+      scheduleSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
   };
 
   useEffect(() => {
@@ -196,7 +207,7 @@ const HeroSection = () => {
           <source src="/bg-img.jpg" type="image/jpg" />
         </video> */}
         <img src="./bg-img.jpg"/>
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="cover-bg inset-0 bg-black/40" />
       </motion.div>
 
       <motion.div 
@@ -232,30 +243,103 @@ const HeroSection = () => {
           }}
           className="absolute inset-0 flex items-center justify-center w-full h-full px-4"
         >
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="mb-6 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 md:text-7xl lg:text-8xl">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.h1 
+              initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ 
+                duration: 1.2, 
+                ease: [0.16, 1, 0.3, 1],
+                delay: 0.5
+              }}
+              className="mb-6 text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 md:text-7xl lg:text-8xl"
+            >
               Welcome to BLITS
-            </h1>
+            </motion.h1>
             
-            <p className="max-w-2xl mx-auto mb-8 text-lg text-gray-300 md:text-xl lg:text-2xl">
-              Join us for the biggest technology summit of the year. 
-              <span className="block mt-2">Experience innovation, connect with industry leaders, and shape the future.</span>
-            </p>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.2 }}
+              className="max-w-5xl mx-auto mb-8"
+            >
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: 1.4 
+                }}
+                className="text-lg text-gray-300 md:text-xl lg:text-2xl leading-relaxed"
+              >
+                <motion.span
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: "easeOut",
+                    delay: 1.6 
+                  }}
+                >
+                  A flagship startup event by BITS Pilani and Bureau of Indian Standards (BIS), offering pitching, certification support, and networking with global industry leaders.
+                </motion.span>
+                <motion.span 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: "easeOut",
+                    delay: 1.8 
+                  }}
+                  className="block mt-4"
+                >
+                  Empowering startups in electrotechnology, digital transformation, and sustainability to innovate and connect with investors. Join 2,000-3,000 attendees including students, startups, and industry experts.
+                </motion.span>
+              </motion.p>
+            </motion.div>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <button 
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.6, 
+                ease: "easeOut",
+                delay: 2.0 
+              }}
+              className="flex flex-wrap items-center justify-center gap-4"
+            >
+              <motion.button 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.5, 
+                  ease: "easeOut",
+                  delay: 2.1 
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={scrollToRegister}
-                className="px-8 py-3 text-lg font-semibold text-white transition-all bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-102"
+                className="px-8 py-3 text-lg font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200"
               >
                 Register Now
-              </button>
-              <button 
-                onClick={scrollToRegister}
-                className="px-8 py-3 text-lg font-semibold text-blue-400 transition-all border-2 border-blue-400 rounded-full hover:bg-blue-400/10 hover:scale-102"
+              </motion.button>
+              <motion.button 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.5, 
+                  ease: "easeOut",
+                  delay: 2.2 
+                }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={scrollToSchedule}
+                className="px-8 py-3 text-lg font-semibold text-blue-400 border-2 border-blue-400 rounded-full hover:bg-blue-400/10 transition-colors duration-200"
               >
-                Learn More
-              </button>
-            </div>
+                View Schedule
+              </motion.button>
+            </motion.div>
           </div>
         </motion.div>
       </motion.div>

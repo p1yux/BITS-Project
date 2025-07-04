@@ -36,8 +36,10 @@ const Navbar = () => {
     e.preventDefault();
     setIsOpen(false);
 
-    if (href === '/#about' || href === '/#faq') {
-      const sectionId = href === '/#about' ? 'about-section' : 'faq-section';
+    if (href === '/#about' || href === '/#passes' || href === '/#schedule' || href === '/#faq') {
+      const sectionId = href === '/#about' ? 'about-section' : 
+                       href === '/#passes' ? 'passes-section' : 
+                       href === '/#schedule' ? 'event-schedule-section' : 'faq-section';
       if (pathname !== '/') {
         await router.push('/');
         // Wait for page transition and elements to load
@@ -55,6 +57,8 @@ const Navbar = () => {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/#about', label: 'About' },
+    { href: '/#passes', label: 'Passes' },
+    { href: '/#schedule', label: 'Schedule' },
     { href: '/#faq', label: 'FAQ' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -85,7 +89,7 @@ const Navbar = () => {
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-                BLITS
+                BLITS 2025
               </span>
             </Link>
 

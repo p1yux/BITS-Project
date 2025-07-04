@@ -1,11 +1,17 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaBuilding } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaBuilding, FaTicketAlt } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSearchParams } from 'next/navigation';
 
 const AttendeeRegistration = ({ onComplete }) => {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  
+  // Get pass type and price from URL parameters
+  const passType = searchParams.get('passType') || 'student';
+  const passPrice = searchParams.get('price') || '500';
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -19,6 +25,8 @@ const AttendeeRegistration = ({ onComplete }) => {
       college: '',
       year: ''
     },
+    passType: passType,
+    passPrice: parseInt(passPrice),
     userId: user?.uid || '',
     registeredAt: new Date().toISOString(),
     status: 'pending'
@@ -232,6 +240,32 @@ const AttendeeRegistration = ({ onComplete }) => {
       >
         Attendee Registration
       </motion.h2>
+      
+      {/* Selected Pass Information */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <FaTicketAlt className="w-5 h-5 text-blue-400" />
+            <div>
+              <p className="text-white font-semibold">
+                {passType.charAt(0).toUpperCase() + passType.slice(1)} Pass
+              </p>
+              <p className="text-gray-400 text-sm">Selected pass type</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              ₹{parseInt(passPrice).toLocaleString()}
+            </p>
+            <p className="text-gray-400 text-sm">Registration fee</p>
+          </div>
+        </div>
+      </motion.div>
       
       <motion.form 
         onSubmit={handleSubmit}

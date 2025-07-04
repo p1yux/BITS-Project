@@ -70,8 +70,8 @@ const RegisterView = () => {
         // If not logged in, trigger Google sign in
         await signInWithGoogle();
       }
-      // Navigate to registration page
-      router.push('/register/attendee');
+      // Navigate to attendee type selection page
+      router.push('/attendee-type');
     } catch (error) {
       console.error('Authentication error:', error);
       alert('Failed to authenticate. Please try again.');
@@ -110,6 +110,22 @@ const RegisterView = () => {
             >
               Be part of the most anticipated tech event of 2025
             </motion.p>
+            <motion.div
+              variants={textVariants}
+              className="pt-4"
+            >
+              <button
+                onClick={() => {
+                  document.getElementById('passes-section')?.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-300 underline decoration-dotted underline-offset-4"
+              >
+                View detailed pass options →
+              </button>
+            </motion.div>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-4 sm:gap-8 px-4 sm:px-0">
@@ -137,7 +153,7 @@ const RegisterView = () => {
                 onClick={handleRegisterClick}
                 className="w-full py-3 px-4 rounded-full font-semibold bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300"
               >
-                {user ? 'Register Now' : 'Sign in to Register'}
+                {user ? 'Choose Your Pass' : 'Sign in to Register'}
               </motion.button>
             </motion.div>
 

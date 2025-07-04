@@ -1,0 +1,7 @@
+1-) Add The feauture that wo so ever registered get the ticket on mail and mobile instantl
+2-) For Speakers write coming soon
+3-) For Sponsors write Zerodah And rest coming soon
+4-) Start Payement gateway
+5-) set a databse in which all the details submited by the particioant rrecorded and we get that acess to see it
+6-)In registration add more features for adding pitch deck and pitching vedio of 2min 
+7-) also start the registration window for sponsors and the amount of title sponosr is 5L , associate is 3 lacks and silver is 1.5Lacks
