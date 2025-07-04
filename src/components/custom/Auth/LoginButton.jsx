@@ -4,11 +4,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { FaTicketAlt } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 const LoginButton = () => {
   const { user, signInWithGoogle, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const router = useRouter();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -40,6 +43,11 @@ const LoginButton = () => {
     } catch (error) {
       console.error('Logout error:', error);
     }
+  };
+
+  const handleMyTicket = () => {
+    setIsDropdownOpen(false);
+    router.push('/register/attendee');
   };
 
   if (!user) {
@@ -103,6 +111,16 @@ const LoginButton = () => {
             </div>
             
             <div className="p-2">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleMyTicket}
+                className="w-full p-2 rounded-lg text-left text-blue-400 hover:bg-white/10 transition-colors duration-300 flex items-center gap-2"
+              >
+                <FaTicketAlt className="w-4 h-4" />
+                My Ticket
+              </motion.button>
+              
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

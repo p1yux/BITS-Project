@@ -176,9 +176,9 @@ const PassesSection = () => {
                     {pass.icon}
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{pass.title}</h3>
-                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                  {/* <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
                     ₹{pass.price.toLocaleString()}
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="space-y-4 mb-8">

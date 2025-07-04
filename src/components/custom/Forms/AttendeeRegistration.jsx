@@ -179,7 +179,12 @@ const AttendeeRegistration = ({ onComplete }) => {
       const data = await response.json();
       
       if (data.success) {
-        onComplete(formData);
+        // Add registration ID to form data
+        const completedData = {
+          ...formData,
+          registrationId: data.registrationId
+        };
+        onComplete(completedData);
       } else {
         throw new Error(data.error || 'Registration failed');
       }
@@ -258,12 +263,12 @@ const AttendeeRegistration = ({ onComplete }) => {
               <p className="text-gray-400 text-sm">Selected pass type</p>
             </div>
           </div>
-          <div className="text-right">
+          {/* <div className="text-right">
             <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
               ₹{parseInt(passPrice).toLocaleString()}
             </p>
             <p className="text-gray-400 text-sm">Registration fee</p>
-          </div>
+          </div> */}
         </div>
       </motion.div>
       

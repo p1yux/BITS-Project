@@ -112,7 +112,7 @@ const AttendeeTypePage = () => {
             <h1 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 mb-8">
               Choose Your Pass
             </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-300 max-w-5xl mx-auto">
               Select the pass that best fits your needs and unlock your BLITS experience
             </p>
           </motion.div>
@@ -144,9 +144,9 @@ const AttendeeTypePage = () => {
                     {pass.icon}
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">{pass.title}</h3>
-                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                  {/* <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
                     ₹{pass.price.toLocaleString()}
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="space-y-4 mb-8">

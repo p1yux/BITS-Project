@@ -3,14 +3,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaDownload } from 'react-icons/fa';
 import LoginButton from '@/components/custom/Auth/LoginButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,6 +54,11 @@ const Navbar = () => {
     } else {
       router.push(href);
     }
+  };
+
+  const handleDownloadTicket = () => {
+    // For now, show an alert. In a real app, you'd fetch user's registration data
+    alert('To download your ticket, please complete registration first or contact support if you\'ve already registered.');
   };
 
   const navLinks = [
@@ -109,6 +116,18 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              {/* {user && (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleDownloadTicket}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 transition-all duration-300"
+                  title="Download Ticket"
+                >
+                  <FaDownload className="w-4 h-4" />
+                  <span className="text-sm font-medium">Ticket</span>
+                </motion.button>
+              )} */}
               <LoginButton />
             </div>
 
@@ -149,6 +168,15 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+                {user && (
+                  <button
+                    onClick={handleDownloadTicket}
+                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-base font-medium text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 transition-colors duration-300"
+                  >
+                    <FaDownload className="w-5 h-5" />
+                    Download Ticket
+                  </button>
+                )}
                 <LoginButton />
               </div>
             </motion.div>
